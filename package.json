@@ -21,6 +21,7 @@
     "cloudflare"
   ],
   "dependencies": {
+    "adm-zip": "^0.4.13",
     "bluebird": "^3.4.7",
     "node-fetch": "^2.2.0"
   },

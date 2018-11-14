@@ -55,7 +55,7 @@ class CloudflareDeploy {
               return this.multiScriptDeployAll();
             } else {
               const functionObject = this.getFunctionObjectForSingleScript();
-              return this.deploySingleScript(functionObject);
+              return this.deploySingleScript(functionObject, this.serverless);
             }
           })
           .then(this.logDeployResponse)

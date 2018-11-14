@@ -18,15 +18,21 @@
  */
 const path = require("path");
 const fs = require("fs");
-const generateCode = thefunctionObject => {
-  let { script } = thefunctionObject;
+const AdmZip = require('adm-zip');
 
-  if (path.extname(script) != ".js") {
-    script = script.concat(".js");
-  }
-  return fs.readFileSync(script).toString();
+const generateCode = async(thefunctionObject, serverless) => {
+	return new Promise((resolve, reject) => {
+		let artifactFilePath = serverless.service.getFunction(serverless.service.getAllFunctions()[0]).package.artifact,
+			artifactFile = new AdmZip(artifactFilePath)
+
+		artifactFile.getEntries().forEach(function(zipEntry) {
+			if (zipEntry.entryName.indexOf('.js') !== -1) {
+	             resolve(zipEntry.getData().toString('utf8'))
+	        }
+		})
+    })
 };
 
 module.exports = {
-  generateCode
+  	generateCode
 };

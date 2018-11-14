@@ -47,7 +47,7 @@ module.exports = {
       method: `GET`
     });
   },
-  async deploySingleScript(funcObj) {
+  async deploySingleScript(funcObj, serverless) {
     return await BB.bind(this).then(async () => {
       //const { routes: singleScriptRoutes, zoneId } = this.provider.config;
 
@@ -58,7 +58,7 @@ module.exports = {
       const singleScriptRoutes = scriptOptions[scriptName]["routes"];
       let workerScriptResponse;
       let routesResponse = [];
-      const scriptContents = generateCode(funcObj);
+      const scriptContents = await generateCode(funcObj, serverless);
 
       const response = await this.singleServeWorkerAPI(scriptContents);
       workerScriptResponse = response;
