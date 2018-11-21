@@ -19,15 +19,27 @@
 const sdk = require("../../provider/sdk");
 const { generateCode } = require("./workerScript");
 const BB = require("bluebird");
+const FormData = require('form-data');
 
 module.exports = {
   async singleServeWorkerAPI(scriptContents) {
     const { zoneId } = this.provider.config;
+    const { namespaceId } = this.provider.config;
+    const body = new FormData();
+    body.append('script', scriptContents);
+    body.append('metadata', JSON.stringify({
+      "body_part": "script",
+      "bindings": [{
+        "name": "NAMESPACE",
+        "type": "kv_namespace",
+        "namespace_id": namespaceId
+      }]
+    }));
+
     return await sdk.cfApiCall({
       url: `https://api.cloudflare.com/client/v4/zones/${zoneId}/workers/script`,
       method: `PUT`,
-      contentType: `application/javascript`,
-      body: scriptContents
+      body: body
     });
   },
 
